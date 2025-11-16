@@ -2,7 +2,8 @@
 
 namespace App\Enum;
 
-enum LivewireEvent: string
+class LivewireEvent
 {
-    case MODAL_CLOSED = 'modal-closed';
+    public const string MODAL_CLOSED = 'modal-closed';
+    public const string SAVED = 'saved';
 }

@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Flux\Flux;
 
 new class extends Component {
     use WithPagination;
@@ -37,6 +36,11 @@ new class extends Component {
             $actions->push(new Action('impersonate', __('Impersonate'), 'hat-glasses'));
         }
 
+        if (auth()->user()->can('delete', $user)) {
+            $actions->push('separator');
+            $actions->push(new Action('confirmDelete', __('Delete'), 'trash'));
+        }
+
         return $actions;
     }
 
@@ -47,7 +51,7 @@ new class extends Component {
         }
 
         $this->user = $user;
-        Flux::modal(Modal::EDIT_USER)->show();
+        $this->modal(Modal::EDIT_USER)->show();
     }
 
     public function impersonate(User $user): void
@@ -58,10 +62,26 @@ new class extends Component {
 
         $this->redirect(route('admin.impersonate', $user->id));
     }
+
+    public function confirmDelete(User $user): void
+    {
+        if (auth()->user()->cannot('delete', $user)) {
+            abort(403);
+        }
+
+        $this->user = $user;
+        $this->modal(Modal::CONFIRM)->show();
+    }
+
+    public function delete(): void
+    {
+        $this->user->delete();
+        $this->reset('user');
+    }
 };
 ?>
 
-<div class="p-6 max-w-screen-lg">
+<div class="p-6 max-w-screen-lg h-full overflow-hidden flex flex-col">
 
     <div class="relative mb-2 w-full flex justify-between items-end">
         <flux:heading size="xl" level="1">{{ __('Users') }}</flux:heading>
@@ -72,7 +92,7 @@ new class extends Component {
         @endcan
     </div>
 
-    <x-table :paginate="$this->users">
+    <x-table :paginate="$this->users" class="flex-1">
         <x-table.columns>
             <x-table.column>{{ __('Name') }}</x-table.column>
             <x-table.column>{{ __('E-mail') }}</x-table.column>
@@ -98,14 +118,16 @@ new class extends Component {
                         <flux:dropdown align="end">
                             <flux:button size="sm" variant="subtle" icon="ellipsis-horizontal"
                                          :disabled="!$actions->count()"></flux:button>
-                            @if ($actions->count())
-                                <flux:menu>
-                                    @foreach($actions as $action)
+                            <flux:menu>
+                                @foreach($actions as $action)
+                                    @if ($action === 'separator')
+                                        <flux:menu.separator/>
+                                    @else
                                         <flux:menu.item icon="{{ $action->icon }}"
                                                         wire:click="{{ $action->method }}({{ $user }})">{{ $action->label }}</flux:menu.item>
-                                    @endforeach
-                                </flux:menu>
-                            @endif
+                                    @endif
+                                @endforeach
+                            </flux:menu>
                         </flux:dropdown>
                     </x-table.cell>
                 </x-table.row>
@@ -113,10 +135,19 @@ new class extends Component {
         </x-table.rows>
     </x-table>
 
-    <livewire:modals::users.create/>
+    <livewire:modals::users.create @saved="$refresh"/>
 
     @if ($this->user)
-        <livewire:modals::users.edit :user="$this->user"/>
+        <livewire:modals::users.edit :user="$this->user" @saved="$refresh"/>
+        <flux:modal name="{{ Modal::CONFIRM }}" @close="$wire.user = null" class="max-w-sm">
+            <div class="space-y-2">
+                <flux:heading size="lg" level="2">{{ __('Delete user') }}</flux:heading>
+                <flux:text>{{ __('Are you sure you want to delete the user :name?', ['name' => $this->user->name]) }}</flux:text>
+            </div>
+            <div class="flex justify-end mt-6 gap-2">
+                <flux:button variant="danger" wire:click="delete" size="sm">{{ __('Delete') }}</flux:button>
+            </div>
+        </flux:modal>
     @endif
 
 </div>
