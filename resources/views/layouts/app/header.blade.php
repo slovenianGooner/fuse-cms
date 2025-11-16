@@ -25,9 +25,9 @@
                     class="[&>span]:hidden lg:[&>span]:inline"/>
 
                 <flux:menu class="w-40">
-                    {{--                    <flux:menu.item icon="cog-6-tooth" href="{{ route('admin.settings.user') }}">--}}
-                    {{--                        Settings--}}
-                    {{--                    </flux:menu.item>--}}
+                    <flux:menu.item icon="cog-6-tooth" href="{{ route('admin.profile.edit') }}">
+                        Settings
+                    </flux:menu.item>
 
                     <form method="post" action="{{ route('logout') }}">
                         @csrf

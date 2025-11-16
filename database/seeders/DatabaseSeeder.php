@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             'name' => config('fuse.super_admin.name'),
             'email' => config('fuse.super_admin.email'),
             'password' => Hash::make(config('fuse.super_admin.password')),
+            'email_verified_at' => now(),
         ]);
 
         // Create 10 more users, 3 with admin roles, others with editor roles.

@@ -28,6 +28,8 @@ class InstallFuse extends Command
         // Later on we will check if FuseCMS is installed, and if so, we will prompt
         // the user to wipe the database and re-install.
         // For now, during development, we always re-install.
+        $this->call('key:generate');
+        $this->call('storage:link');
         $this->call('migrate:fresh');
         $this->call('fuse:sync-permissions');
         $this->call('db:seed');
