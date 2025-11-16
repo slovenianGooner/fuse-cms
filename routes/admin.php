@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ImpersonateController;
+use App\Models\User;
 use Laravel\Fortify\Features;
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], function () {
@@ -23,4 +25,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
             )
         )
         ->name('two-factor.show');
+
+    Route::get('impersonate/take/{id}/{guardName?}', [ImpersonateController::class, 'take'])->name('impersonate')->can('impersonate', User::class);
+    Route::get('impersonate/leave', [ImpersonateController::class, 'leave'])->name('impersonate.leave');
 });

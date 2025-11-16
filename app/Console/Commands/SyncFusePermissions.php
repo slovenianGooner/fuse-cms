@@ -57,7 +57,7 @@ class SyncFusePermissions extends Command
         $enums = [...Role::cases()];
 
         foreach ($enums as $enum) {
-            SpatieRole::firstOrCreate(['name' => $enum]);
+            SpatieRole::firstOrCreate(['name' => $enum->value]);
         }
 
         SpatieRole::whereNotIn('name', collect($enums)->pluck('value'))->delete();

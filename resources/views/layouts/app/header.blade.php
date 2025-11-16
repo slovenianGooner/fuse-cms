@@ -6,7 +6,7 @@
 
         @if (is_impersonating())
             <div class="fixed top-0 left-1/2 -ml-24">
-                <flux:button icon="ban" variant="danger" size="xs" :href="route('admin.impersonate.leave')"
+                <flux:button icon="hat-glasses" variant="danger" size="xs" :href="route('admin.impersonate.leave')"
                              class="mr-1.5 w-48! rounded-t-none!">
                     Stop impersonating
                 </flux:button>
@@ -25,7 +25,7 @@
                     class="[&>span]:hidden lg:[&>span]:inline"/>
 
                 <flux:menu class="w-40">
-                    <flux:menu.item icon="cog-6-tooth" href="{{ route('admin.profile.edit') }}">
+                    <flux:menu.item icon="cog" href="{{ route('admin.profile.edit') }}">
                         Settings
                     </flux:menu.item>
 
