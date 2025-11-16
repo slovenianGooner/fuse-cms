@@ -1,9 +1,9 @@
+@php use App\DTO\Admin\SidebarMenuGroup; @endphp
 @props(['items'])
 
 @foreach($items as $item)
-    @if ($item instanceof MenuItemGroup)
-        <flux:sidebar.group icon="{{ $item->icon }}" :expanded="$item->expanded"
-                            :root="$root"
+    @if ($item instanceof SidebarMenuGroup)
+        <flux:sidebar.group icon="{{ $item->icon }}" expandable :expanded="$item->expanded"
                             heading="{{ $item->heading }}"
                             class="grid">
             <x-layouts::app.sidebar-group :items="$item->items"/>

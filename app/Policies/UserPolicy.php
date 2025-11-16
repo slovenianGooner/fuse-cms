@@ -13,7 +13,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->can(Permission::VIEW_USERS);
     }
 
     /**
@@ -21,7 +21,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return false;
+        return $user->can(Permission::VIEW_USERS);
     }
 
     /**
@@ -29,7 +29,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->can(Permission::CREATE_USER);
     }
 
     /**
@@ -37,7 +37,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return false;
+        return $user->can(Permission::EDIT_USER) and !$model->isSuperAdmin();
     }
 
     public function impersonate(User $user, ?User $impersonated = null): bool
@@ -75,6 +75,6 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return false;
+        return $user->can(Permission::DELETE_USER) and !$model->isSuperAdmin();
     }
 }

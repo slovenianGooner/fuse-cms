@@ -13,6 +13,10 @@ return [
     'permissions' => [
         Role::ADMIN->value => [
             Permission::IMPERSONATE,
+            Permission::VIEW_USERS,
+            Permission::CREATE_USER,
+            Permission::EDIT_USER,
+            Permission::DELETE_USER,
         ],
         Role::EDITOR->value => [
 

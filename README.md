@@ -14,7 +14,7 @@
 
 ### Task list
 
-- [ ] fortify views
+- [x] fortify views
 - [ ] users + management (CRUD + role assignment)
 - [x] roles (defined in code)
 - [x] permissions (defined in code)
